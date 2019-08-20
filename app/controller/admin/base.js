@@ -87,9 +87,11 @@ class BaseController extends Controller {
         }
       }
 
-      let updateResult = this.ctx.model[model].updateOne({
+      let updateResult = await this.ctx.model[model].updateOne({
         _id: id
       }, json)
+
+      console.log('状态更新', updateResult)
 
       if (updateResult) {
         this.ctx.body = {

@@ -68,6 +68,66 @@ class FocusController extends Controller {
 
 
 
+    //edit 页面
+    async edit() {
+
+        //获取 get 请求的id
+        let id = this.ctx.query.id;
+
+        // 查询数据库
+        let result = await this.ctx.model.Focus.find({
+            _id: id
+        });
+
+        await this.ctx.render('/admin/focus/edit', {
+            list: result[0]
+        });
+    }
+
+    // 保存修改
+    async doEdit() {
+
+        let parts = this.ctx.multipart({
+            autoFields: true
+        });
+
+        let files = {};
+
+        let stream;
+
+        while ((stream = await parts()) != null) {
+            if (!stream.filename) {
+                break;
+            }
+
+            let fieldname = stream.fieldname;
+
+            let dir = await this.service.tools.getUploadFile(stream.filename)
+            let target = dir.uploadDir;
+
+            let writeStream = fs.createWriteStream(target);
+
+            await pump(stream, writeStream);
+
+            files = Object.assign(files, {
+                [fieldname]: dir.saveDir
+            })
+        }
+
+        //获取id
+        let id = parts.field.id;
+
+        let updateResult = Object.assign(files, parts.field);
+
+        let result = await this.ctx.model.Focus.updateOne({
+            _id: id
+        }, updateResult);
+
+        await this.success('/admin/focus', '修改成功')
+    }
+
+
+
     //   单个文件上传
     async doSingleUpload() {
         const stream = await this.ctx.getFileStream();
