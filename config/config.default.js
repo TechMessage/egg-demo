@@ -6,19 +6,19 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1534304805936_5738';
 
-  config.session={
-    key:'SESSION_ID',
-    maxAge:864000,
+  config.session = {
+    key: 'SESSION_ID',
+    maxAge: 864000,
     httpOnly: true,
     encrypt: true,
     renew: true //  延长会话有效期       
   }
-  
+
 
   // add your config here
   config.middleware = ['adminauth'];
 
-  config.adminauth={
+  config.adminauth = {
     match: '/admin',
   }
 
@@ -40,6 +40,10 @@ module.exports = appInfo => {
       options: {},
     }
   };
-  
+
+
+  // 配置上传文件 根目录
+  config.uploadDir = 'app/public/admin/upload';
+
   return config;
 };
