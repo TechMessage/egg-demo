@@ -16,10 +16,14 @@ module.exports = app => {
   router.post('/admin/doLogin', controller.admin.login.doLogin);
   router.get('/admin/loginOut', controller.admin.login.loginOut);
 
+  router.get('/admin', controller.admin.main.index);
+  router.get('/admin/welcome', controller.admin.main.welcome);
+
   //公共的api
   router.get('/admin/verify', controller.admin.base.verify);
   router.get('/admin/changeStatus', controller.admin.base.changeStatus);
   router.get('/admin/delete', controller.admin.base.delete);
+  router.get('/admin/editNum', controller.admin.base.editNum);
 
   // 管理员
   router.get('/admin/manager', controller.admin.manager.index);
