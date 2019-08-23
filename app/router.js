@@ -65,4 +65,14 @@ module.exports = app => {
   router.post('/admin/focus/doSingleUpload', controller.admin.focus.doSingleUpload);
   router.post('/admin/focus/doMultiUpload', controller.admin.focus.doMultiUpload);
 
+
+  //商品类型
+
+  router.get('/admin/goodsType', controller.admin.goodsType.index);
+  router.get('/admin/goodsType/add', controller.admin.goodsType.add);
+  router.get('/admin/goodsType/edit', controller.admin.goodsType.edit);
+  router.post('/admin/goodsType/doEdit', controller.admin.goodsType.doEdit);
+  router.post('/admin/goodsType/doAdd', controller.admin.goodsType.doAdd);
+
+
 };
