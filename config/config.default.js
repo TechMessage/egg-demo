@@ -8,7 +8,7 @@ module.exports = appInfo => {
 
   config.session = {
     key: 'SESSION_ID',
-    maxAge: 864000,
+    maxAge: 1000 * 60 * 60 * 12,
     httpOnly: true,
     encrypt: true,
     renew: true //  延长会话有效期       
@@ -50,6 +50,19 @@ module.exports = appInfo => {
   config.multipart = {
     fields: '50'
   };
+
+  config.security = {
+    csrf: { 
+      // 判断是否需要 ignore 的方法，请求上下文 context 作为第一个参数
+      ignore: ctx => {
+        if (ctx.request.url == '/admin/goods/goodsUploadImage' || ctx.request.url == '/admin/goods/goodsUploadPhoto') {
+          return true;
+        }
+        return false;
+      }
+    }
+  }
+
 
   return config;
 };

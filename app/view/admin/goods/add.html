@@ -1,32 +1,49 @@
 <%- include ../public/page_header.html %>
 
 
-<!-- Include CSS for icons. -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
-    type="text/css" />
+
+
+
+<!-- 富文本编辑器 -->
+<link href="/public/admin/wysiwyg-editor/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
 <!-- Include Editor style. -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css" rel="stylesheet"
-    type="text/css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet"
-    type="text/css" />
-
+<link href="/public/admin/wysiwyg-editor/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<link href="/public/admin/wysiwyg-editor/css/froala_style.min.css" rel="stylesheet" type="text/css" />
 
 <!-- 引入jquery -->
 <!-- Include Editor JS files. -->
-<script type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
-
+<script type="text/javascript" src="/public/admin/wysiwyg-editor/js/froala_editor.pkgd.min.js"></script>
 
 <script type="text/javascript" src="/public/admin/wysiwyg-editor/js/zh_cn.js"></script>
 
 
+<!-- 批量上传图片插件 -->
+
+<link rel="stylesheet" type="text/css" href="/public/admin/webuploader/css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/public/admin/webuploader/css/diyUpload.css">
+<script type="text/javascript" src="/public/admin/webuploader/js/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="/public/admin/webuploader/js/diyUpload.js"></script>
+
+
+<style>
+    .photoLib div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .photoLib {
+        width: 150px;
+        margin: 20px auto;
+    }
+</style>
 
 <div class="panel panel-default">
 
     <div class="panel-body">
         <div class="table-responsive input-form">
-            <form action="/admin/goods/doAdd" method="post" class="goods_content">
+            <form action="/admin/goods/doAdd?_csrf=<%=csrf%>" method="post" class="goods_content"
+                enctype="multipart/form-data">
 
 
                 <!-- Nav tabs -->
@@ -48,7 +65,28 @@
                             <li> <span> 商品标题:</span> <input type="text" name="title" class="input" /></li>
                             <li> <span> 附属标题:</span> <input type="text" name="sub_title" class="input" /></li>
                             <li> <span>商品版本:</span> <input type="text" name="goods_version" class="input" /></li>
-                            <li> <span>所属分类:</span> <select name="cid" id="cid">
+                            <li> <span>所属分类:</span>
+
+
+
+                                <select name="cid" id="cid">
+
+
+                                    <%for(var i=0;i<goodsCate.length;i++){%>
+
+                                    <option value="<%=goodsCate[i]._id%>"><%=goodsCate[i].title%></option>
+                                    <%for(var j=0;j<goodsCate[i].items.length;j++){%>
+
+                                    <option value="<%=goodsCate[i].items[j]._id%>">----<%=goodsCate[i].items[j].title%>
+                                    </option>
+
+
+
+                                    <%}%>
+
+
+                                                <%}%>
+
 
                                 </select>
 
@@ -81,7 +119,7 @@
                             <li> <span>商品颜色:</span>
 
                                 <%for(var i=0;i<colorResult.length;i++){%>
-                                <input type="checkbox" name="colors[]" value="<%=colorResult[i]._id%>"
+                                <input type="checkbox" name="colors" value="<%=colorResult[i]._id%>"
                                     id="color_<%=colorResult[i]._id%>" /> <label
                                     for="color_<%=colorResult[i]._id%>"><%=colorResult[i].color_name%></label>
                                 <%}%>
@@ -118,147 +156,143 @@
                                          
                                         
                                 </ul>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="attribute">
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="attribute">
 
-                            
+                                
+ 
+                                <ul class="form_input">
 
-                            <ul class="form_input">
+                                        <li> <span>商品类型:　</span>
+                                            
+                                            <select name="goods_type_id" id="goods_type_id">
 
-                                    <li> <span>商品类型:　</span>
-                                        
-                                        <select name="goods_type_id" id="goods_type_id">
+                                                <option value="0">--请选择商品类型--</option>
 
-                                            <option value="0">--请选择商品类型--</option>
-
-                                            <%for(var i=0;i<goodsType.length;i++){%>
+                                                <%for(var i=0;i<goodsType.length;i++){%>
                                 <option value="<%=goodsType[i]._id%>"><%=goodsType[i].title%></option>
                                 <%}%>
 
-                                        </select>
-    
-                                        </li>
-    
-                            </ul>
+                                            </select>
+        
+                                         </li>
+        
+                                </ul>
 
 
-                            <ul class="form_input" id="goods_type_attribute">
+                                <ul class="form_input" id="goods_type_attribute">
 
 
 
-                            </ul>
+                                </ul>
 
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="photo">
+
+                                <div id="photoLib"  class="photoLib"></div>
+
+
+                                <div id="photoList">
+
+
+                                </div>
+                        </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="photo">
-
-                            商品相册
-                    </div>
-                </div>
                      
 
-                    <input type="hidden" name="_csrf" value="<%=csrf%>">
+                    
 
-                                <button type="submit" class="btn btn-success goods_content_btn">提交</button>
+                    <button type="submit" class="btn btn-success goods_content_btn">提交</button>
+    
 
 
-
-            </form>
+                </form>
+            </div>
         </div>
+
+
     </div>
 
-
-</div>
-
 <script>
-    $(function () {
 
+        $(function(){
+    
+            //关联商品类型
+            $('#goods_type_id').change(function(){
 
-        $('#goods_type_id').change(function () {
+                    // alert($(this).val());
 
-            // alert($(this).val());
+                    var cate_id=$(this).val();
 
-            var cate_id = $(this).val();
+                    var data='';
+                    $.get('/admin/goods/goodsTypeAttribute?cate_id='+cate_id,function(response){
+                        console.log(response.result);
 
-            var data = '';
-            $.get('/admin/goods/goodsTypeAttribute?cate_id=' + cate_id, function (response) {
-                console.log(response.result);
+                        data=response.result;                           
+                        console.log(data.length);    
+                        var str="";
+                        for(var i=0;i<data.length;i++){
 
-                data = response.result;
+                            if(data[i].attr_type==1){    
+                            str+='<li><span>'+data[i].title+': 　</span><input type="hidden" name="attr_id_list" value="'+data[i]._id+'" />  <input type="text" name="attr_value_list" /></li>' 
+                            }else if(data[i].attr_type==2){
+                                str+='<li><span>'+data[i].title+': 　</span> <input type="hidden" name="attr_id_list" value="'+data[i]._id+'">  <textarea cols="50" rows="3" name="attr_value_list"></textarea></li>'                            
+                            }else{
+                                var arr=data[i].attr_value.split('\n');   
 
+                                str+='<li><span>'+data[i].title+': 　</span><input type="hidden" name="attr_id_list" value="'+data[i]._id+'">';
 
-                console.log(data.length);
+                                    str+='<select name="attr_value_list">';
+                                        
+                                        for(var j=0;j<arr.length;j++){
+                                            
+                                            str+='<option value="'+arr[j]+'">'+arr[j]+'</option>';
+                                        }
+                                    str+='</select>';
+                                str+='</li>';
+                            }
 
-                var str = "";
-                for (var i = 0; i < data.length; i++) {
+                        }    
 
-                    if (data[i].attr_type == 1) {
+                        $('#goods_type_attribute').html(str);
+                    })
 
-                        str += '<li><span>' + data[i].title +
-                            ': 　</span><input type="hidden" name="attr_id_list[]" value="' +
-                            data[i]._id +
-                            '" />  <input type="text" name="attr_value_list[]" /></li>'
-                    } else if (data[i].attr_type == 2) {
-                        str += '<li><span>' + data[i].title +
-                            ': 　</span> <input type="hidden" name="attr_id_list[]" value="' +
-                            data[i]._id +
-                            '">  <textarea cols="50" rows="3" name="attr_value_list[]"></textarea></li>'
-                    } else {
-                        var arr = data[i].attr_value.split('\n');
-
-
-                        str += '<li><span>' + data[i].title +
-                            ': 　</span><input type="hidden" name="attr_id_list[]" value="' +
-                            data[i]._id + '">';
-
-                        str += '<select name="attr_value_list[]">';
-
-                        for (var j = 0; j < arr.length; j++) {
-
-                            str += '<option value="' + arr[j] + '">' + arr[j] + '</option>';
-                        }
-                        str += '</select>';
-                        str += '</li>';
-
-
-
-                    }
-
-                }
-
-
-                $('#goods_type_attribute').html(str);
-
-
+                })
             })
+            //富文本编辑器
+        
+            $(function() {
+                $('#content').froalaEditor({
+                    height: 300,    //给编辑器设置默认的高度
+                    language: 'zh_cn',   
+                    imageUploadURL: '/admin/goods/goodsUploadImage',
+                    //根据不同的分辨率加载不同的配置
+                    toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertFile', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'],
+                    toolbarButtonsMD: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertFile', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'],
+                    toolbarButtonsSM: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-', 'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertFile', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo']
+                });
+            });
 
 
+            //批量上传图片
 
-        })
-    })
-</script>
+            $(function(){
 
-<script>
-    $(function () {
-        $('#content').froalaEditor({
 
-            height: 300, //给编辑器设置默认的高度
-            language: 'zh_cn',
-            //根据不同的分辨率加载不同的配置
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript',
-                'superscript', '|', 'fontFamily', 'fontSize', 'color'
-            ],
-            toolbarButtonsMD: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-                'subscript',
-                'superscript', '|', 'fontFamily', 'fontSize', 'color'
-            ],
-            toolbarButtonsSM: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-                'subscript',
-                'superscript', '|', 'fontFamily', 'fontSize', 'color'
-            ]
-        });
-    });
-</script>
+                var photoStr='';                
+                $('#photoLib').diyUpload({
+                    url:'/admin/goods/goodsUploadPhoto',                    
+                    success:function( response ) {
+                        // console.info( data );
+                        photoStr='<input type="hidden" name="goods_image_list" value='+response.link+' />';
 
+                        $('#photoList').append(photoStr);
+                    },
+                    error:function( err ) {
+                        console.info( err );	
+                    }
+                });
+            })
+ </script>
 </body>
-
 </html>

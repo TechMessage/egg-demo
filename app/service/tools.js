@@ -62,11 +62,30 @@ class ToolsService extends Service {
     }
   }
 
-  
+
 
   // 获取当前时间的毫秒数
   async getTime() {
     return new Date().getTime();
+  }
+
+
+  //生成缩略图的公共方法
+  async jimpImg(target) {
+    //上传图片成功以后生成缩略图
+    Jimp.read(target, (err, lenna) => {
+      if (err) throw err;
+      lenna.resize(200, 200) // resize
+        .quality(90) // set JPEG quality                  
+        .write(target + '_200x200' + path.extname(target)); // save
+
+
+      lenna.resize(400, 400) // resize
+        .quality(90) // set JPEG quality                  
+        .write(target + '_400x400' + path.extname(target)); // save
+    });
+
+
   }
 
 }
