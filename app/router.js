@@ -95,6 +95,7 @@ module.exports = app => {
   //商品模块
   router.get('/admin/goods', controller.admin.goods.index);
   router.get('/admin/goods/add', controller.admin.goods.add);
-
+  router.get('/admin/goods/goodsTypeAttribute', controller.admin.goods.goodsTypeAttribute);
+  router.post('/admin/goods/doAdd', controller.admin.goods.doAdd);
 
 };
