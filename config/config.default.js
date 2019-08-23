@@ -45,5 +45,11 @@ module.exports = appInfo => {
   // 配置上传文件 根目录
   config.uploadDir = 'app/public/admin/upload';
 
+
+  //配置表单最大数量
+  config.multipart = {
+    fields: '50'
+  };
+
   return config;
 };

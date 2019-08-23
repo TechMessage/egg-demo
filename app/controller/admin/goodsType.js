@@ -13,14 +13,14 @@ class GoodsTypeController extends Controller {
         });
     }
 
-
+    // 商品 新增页
     async add() {
-
 
         await this.ctx.render('admin/goodsType/add');
 
     }
 
+     //处理新增
     async doAdd() {
 
         //  console.log(this.ctx.request.body);
@@ -36,7 +36,7 @@ class GoodsTypeController extends Controller {
 
 
 
-
+    //编辑页
     async edit() {
 
 
@@ -53,6 +53,7 @@ class GoodsTypeController extends Controller {
 
     }
 
+    //处理编辑
     async doEdit() {
 
 
